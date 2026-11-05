@@ -1,0 +1,28 @@
+[project]
+name = "slopwatch"
+version = "0.1.0"
+description = "An observatory for AI-hallucinated software packages (slopsquatting): measures, monitors and scans."
+readme = "README.md"
+authors = [
+    { name = "Samiya Patel", email = "samiya.22311020@viit.ac.in" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "cryptography>=50.0.2",
+    "httpx>=0.28.1",
+    "openai>=3.46.0",
+    "python-dotenv>=1.2.4",
+    "rich>=15.0.0",
+]
+
+[project.scripts]
+slopwatch = "slopwatch:main"
+
+[build-system]
+requires = ["uv_build>=0.13.7,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]

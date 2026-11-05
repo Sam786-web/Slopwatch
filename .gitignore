@@ -1,0 +1,22 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Secrets - never commit
+.env
+
+# Local data (raw responses / databases)
+data/*.db*
+data/raw/
+data/daily.log
+# Plain-text sensitive data: only the encrypted .enc versions are committed
+data/watchlist.json
+data/alerts.json
+guarddog.txt

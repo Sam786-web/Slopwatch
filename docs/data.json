@@ -1,0 +1,283 @@
+{
+ "generated_at": "2026-11-05T12:57+00:00",
+ "totals": {
+  "prompts": 188,
+  "responses": 207,
+  "models": 4,
+  "install_mentions": 415,
+  "hallucinated": 15,
+  "rate": 0.0361,
+  "unique_fake_names": 15,
+  "watched": 20,
+  "registered": 0,
+  "period": [
+   "2026-11-05 12:18:34",
+   "2026-11-05 12:57:23"
+  ]
+ },
+ "models": [
+  {
+   "model": "openrouter/free",
+   "provider": "openrouter",
+   "mentions": 103,
+   "hallucinated": 7,
+   "rate": 0.068,
+   "unique": 7,
+   "low_sample": false
+  },
+  {
+   "model": "openai/gpt-oss-120b",
+   "provider": "groq",
+   "mentions": 259,
+   "hallucinated": 8,
+   "rate": 0.0309,
+   "unique": 8,
+   "low_sample": false
+  },
+  {
+   "model": "gemini-3.5-flash",
+   "provider": "gemini",
+   "mentions": 30,
+   "hallucinated": 0,
+   "rate": 0.0,
+   "unique": 0,
+   "low_sample": false
+  },
+  {
+   "model": "qwen/qwen3.8-27b",
+   "provider": "groq",
+   "mentions": 23,
+   "hallucinated": 0,
+   "rate": 0.0,
+   "unique": 0,
+   "low_sample": true
+  }
+ ],
+ "ecosystems": {
+  "npm": {
+   "mentions": 159,
+   "hallucinated": 11,
+   "rate": 0.0692,
+   "low_sample": false
+  },
+  "pypi": {
+   "mentions": 256,
+   "hallucinated": 4,
+   "rate": 0.0156,
+   "low_sample": false
+  }
+ },
+ "categories": {
+  "AI / modern stack": {
+   "mentions": 62,
+   "hallucinated": 7,
+   "rate": 0.1129,
+   "low_sample": false
+  },
+  "niche": {
+   "mentions": 36,
+   "hallucinated": 3,
+   "rate": 0.0833,
+   "low_sample": false
+  },
+  "security": {
+   "mentions": 91,
+   "hallucinated": 3,
+   "rate": 0.033,
+   "low_sample": false
+  },
+  "niche data formats": {
+   "mentions": 64,
+   "hallucinated": 1,
+   "rate": 0.0156,
+   "low_sample": false
+  },
+  "AI / data": {
+   "mentions": 65,
+   "hallucinated": 1,
+   "rate": 0.0154,
+   "low_sample": false
+  },
+  "infra / devops": {
+   "mentions": 24,
+   "hallucinated": 0,
+   "rate": 0.0,
+   "low_sample": true
+  },
+  "common": {
+   "mentions": 73,
+   "hallucinated": 0,
+   "rate": 0.0,
+   "low_sample": false
+  }
+ },
+ "templates": {
+  "script": {
+   "mentions": 238,
+   "hallucinated": 4,
+   "rate": 0.0168,
+   "low_sample": false,
+   "text": "Write a {lang} script that will {task}. Show the {installer} command for any packages you use."
+  },
+  "library": {
+   "mentions": 177,
+   "hallucinated": 11,
+   "rate": 0.0621,
+   "low_sample": false,
+   "text": "What is the best {lang} library to {task}? Give the install command and a short usage example."
+  }
+ },
+ "fake_names": [
+  {
+   "ecosystem": "pypi",
+   "label": "sn••••••",
+   "length": 5,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "pypi",
+   "label": "py••••••",
+   "length": 13,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "bl••••••",
+   "length": 5,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "go••••••",
+   "length": 20,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "co••••••",
+   "length": 16,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "we••••••",
+   "length": 7,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "pypi",
+   "label": "ha••••••",
+   "length": 23,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@o••••••",
+   "length": 37,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@o••••••",
+   "length": 26,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "pr••••••",
+   "length": 25,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "pypi",
+   "label": "mi••••••",
+   "length": 11,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@s••••••",
+   "length": 22,
+   "times": 1,
+   "models": [
+    "openai/gpt-oss-120b"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@s••••••",
+   "length": 24,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@o••••••",
+   "length": 40,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  },
+  {
+   "ecosystem": "npm",
+   "label": "@o••••••",
+   "length": 36,
+   "times": 1,
+   "models": [
+    "openrouter/free"
+   ],
+   "registered": false
+  }
+ ],
+ "registered": []
+}

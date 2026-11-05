@@ -1,0 +1,65 @@
+# One task per line. Each becomes 2 prompts (see TEMPLATES in src/slopwatch/prompts.py).
+# Mix of common tasks (baseline) and niche ones (where hallucinations are likely).
+# --- common ---
+read text and tables from PDF files
+send emails with attachments through Gmail
+scrape product prices from a website
+resize and compress a folder of images
+convert Excel spreadsheets to CSV
+call a REST API with retries and timeouts
+create a command-line tool with subcommands
+schedule a job to run every day at 9 am
+generate QR codes
+validate JSON against a schema
+# --- security ---
+scan a network for open ports
+parse and analyze Windows EVTX event logs
+detect leaked secrets and API keys in a git repository
+check whether a password appears in known data breaches
+parse Suricata EVE JSON alerts and summarize them
+generate YARA rules from malware samples
+analyze PCAP files and extract HTTP requests
+enumerate subdomains of a domain using certificate transparency logs
+decode and verify JWT tokens
+query the MITRE ATT&CK framework programmatically
+parse Nessus scan result files
+check SPF, DKIM and DMARC records of a domain
+extract indicators of compromise from threat reports
+sandbox and statically analyze a suspicious Office macro document
+# --- niche data formats ---
+read Garmin FIT fitness files
+parse HL7 v2 medical messages
+read and write DICOM medical images
+parse EDI X12 850 purchase orders
+read data from Siemens S7 PLCs
+decode CAN bus messages using a DBC file
+parse SWIFT MT103 banking messages
+read GRIB2 weather forecast files
+parse IFC building information models
+read Bruker NMR spectroscopy data
+parse ADS-B aircraft transponder messages
+read data from a Modbus TCP device
+extract text from scanned Hindi documents with OCR
+parse Indian GST invoices from PDF
+validate Indian Aadhaar and PAN numbers
+convert Markdown to a styled DOCX report
+# --- AI / data ---
+chunk long documents for a RAG pipeline
+detect PII in text and redact it
+fine-tune a small language model with LoRA on a laptop
+evaluate hallucinations in LLM outputs
+stream tokens from a local LLM to a web page
+convert a PyTorch model to run on a Raspberry Pi
+deduplicate near-identical images
+detect anomalies in server CPU metrics
+translate subtitles files between languages
+transcribe audio files offline
+# --- infra / devops ---
+manage AWS S3 lifecycle policies
+lint Terraform files for security misconfigurations
+generate an SBOM for a Python project
+monitor a Kubernetes cluster for crashing pods
+rotate secrets stored in HashiCorp Vault
+parse and diff nginx configuration files
+send alerts to Microsoft Teams channels
+test gRPC services automatically

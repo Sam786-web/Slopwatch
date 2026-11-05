@@ -1,0 +1,5 @@
+#!/bin/sh
+# Install with:  cp scripts/pre-commit .git/hooks/pre-commit
+# Blocks commits containing unregistered hallucinated package names. Skips if no local database (e.g. CI).
+[ -f data/slopwatch.db ] || exit 0
+exec python -m uv run --quiet slopwatch leakcheck

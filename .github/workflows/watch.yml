@@ -1,0 +1,70 @@
+# Daily watchtower: re-check hallucinated names, detect registrations, scan suspicious packages.
+#
+# The repo is public, so everything that names an unregistered or unreported package stays
+# ENCRYPTED (data/*.enc, key = repository secret SLOPWATCH_KEY). Issues contain counts only;
+# read details locally with `slopwatch alerts` after `git pull`.
+name: slopwatch-daily
+
+on:
+  schedule:
+    - cron: "17 3 * * *"   # every day 03:17 UTC (08:47 IST)
+  workflow_dispatch:        # "Run workflow" button for manual runs
+
+permissions:
+  contents: write   # commit the updated encrypted watchlist
+  issues: write     # open an issue when something is found
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SLOPWATCH_KEY: ${{ secrets.SLOPWATCH_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.11"
+
+      - name: Check the encryption key is configured
+        run: |
+          if [ -z "$SLOPWATCH_KEY" ]; then
+            echo "::error::Add the SLOPWATCH_KEY repository secret (Settings > Secrets and variables > Actions)"; exit 1
+          fi
+
+      - name: Run watchtower
+        run: uv run slopwatch watch --watchlist data/watchlist.json.enc
+
+      # Second opinion from Datadog's GuardDog (Linux only, so it runs here rather than on Windows).
+      - name: GuardDog scan of flagged packages
+        continue-on-error: true
+        run: |
+          jq -r '(.flips[] | "\(.ecosystem) \(.name)"), (.risky_packages[] | "\(.ecosystem) \(.name)")' data/alerts.json \
+            | sort -u > flagged.txt
+          : > guarddog.txt
+          while read -r eco name; do
+            echo "### $eco/$name" >> guarddog.txt
+            uvx guarddog "$eco" scan "$name" >> guarddog.txt 2>&1 || true
+          done < flagged.txt
+          if [ -s guarddog.txt ]; then uv run slopwatch crypt encrypt guarddog.txt data/guarddog.txt.enc; fi
+
+      - name: Open an issue if anything was found (counts only - details stay encrypted)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flips=$(jq '.flips | length' data/alerts.json)
+          risky=$(jq '.risky_packages | length' data/alerts.json)
+          if [ $((flips + risky)) -gt 0 ]; then
+            gh issue create --title "SlopWatch alert $(date -u +%F)" --body \
+              "Watchtower found **$flips** newly registered hallucinated name(s) and **$risky** risky package(s). Details are encrypted: run \`git pull && uv run slopwatch alerts\` locally."
+          fi
+
+      - name: Commit encrypted state
+        run: |
+          git config user.name "slopwatch-bot"
+          git config user.email "slopwatch-bot@users.noreply.github.com"
+          git add data/watchlist.json.enc data/alerts.json.enc
+          [ -f data/guarddog.txt.enc ] && git add data/guarddog.txt.enc
+          git diff --cached --quiet || git commit -m "watch: daily update $(date -u +%F)"
+          git push

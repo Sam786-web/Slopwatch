@@ -1,0 +1,41 @@
+# One task per line. Each becomes 2 prompts (see TEMPLATES in src/slopwatch/prompts.py).
+# --- common ---
+upload files to S3 from an Express server
+validate form input on the server
+send transactional emails
+generate PDF invoices
+rate limit an API
+schedule cron jobs
+parse CSV files with streaming
+resize images on upload
+# --- security ---
+add CSRF protection to an Express app
+sanitize user HTML to prevent XSS
+implement passkey (WebAuthn) login
+verify webhook signatures from Stripe and GitHub
+detect bots and credential stuffing on a login page
+encrypt fields in MongoDB documents
+scan npm dependencies for malicious install scripts
+implement Content Security Policy reporting
+# --- niche ---
+read data from a Bluetooth Low Energy heart-rate sensor
+control a DMX lighting controller
+parse MIDI files and extract notes
+talk to a thermal receipt printer over USB
+read NFC tags in the browser
+parse GPX and KML map files
+render 3D STL models in the browser
+read OBD-II car diagnostics over Bluetooth
+connect to an OPC UA industrial server
+generate UPI payment QR codes
+parse Tally ERP XML exports
+validate IBAN and SWIFT codes
+# --- AI / modern stack ---
+build a RAG chatbot with a local vector database
+stream LLM responses with server-sent events
+run a small embedding model in the browser
+detect prompt injection in user input
+build an MCP server that exposes a database
+count tokens for different LLMs
+add OpenTelemetry tracing to a Next.js app
+build a realtime collaborative text editor

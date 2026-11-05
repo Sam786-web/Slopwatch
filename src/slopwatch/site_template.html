@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SlopWatch</title>
+<meta name="description" content="An open observatory measuring how often AI coding assistants recommend software packages that don't exist, and whether attackers register them.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e8a33d'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23161311' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23161311'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #f6f4ef; --surface: #ffffff; --surface-2: #efece5; --line: #dedad0;
+  --text: #1d1b17; --muted: #6b665c; --faint: #9a9488;
+  --accent: #b86e0a; --accent-soft: #f5e6cf;
+  --bad: #c2362b; --bad-soft: #f8dcd8; --ok: #2f7d4f; --ok-soft: #d9efe1;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Consolas, monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12100e; --surface: #1b1815; --surface-2: #24201c; --line: #34302a;
+    --text: #ece7de; --muted: #a39b8e; --faint: #6f685d;
+    --accent: #e8a33d; --accent-soft: #3a2b16;
+    --bad: #f0675a; --bad-soft: #3d1c19; --ok: #5cc58a; --ok-soft: #173225;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12100e; --surface: #1b1815; --surface-2: #24201c; --line: #34302a;
+  --text: #ece7de; --muted: #a39b8e; --faint: #6f685d;
+  --accent: #e8a33d; --accent-soft: #3a2b16;
+  --bad: #f0675a; --bad-soft: #3d1c19; --ok: #5cc58a; --ok-soft: #173225;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.55 var(--sans); }
+a { color: var(--accent); }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+header.top { border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.01em; text-decoration: none; color: var(--text); }
+.brand .dot { width: 22px; height: 22px; border-radius: 6px; background: var(--accent); display: grid; place-items: center; }
+.brand .dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--bg); }
+nav a { color: var(--muted); text-decoration: none; font-size: 14px; margin-left: 18px; }
+nav a:hover { color: var(--text); }
+@media (max-width: 640px) { nav a.opt { display: none; } }
+
+.hero { padding-top: 56px; padding-bottom: 32px; }
+.eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: clamp(30px, 5vw, 46px); line-height: 1.1; letter-spacing: -.02em; margin: 14px 0 16px; max-width: 18ch; }
+.lede { color: var(--muted); font-size: 18px; max-width: 62ch; margin: 0; }
+.lede code, p code, li code { font-family: var(--mono); font-size: .9em; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 36px 0 8px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+.kpi .v { font: 700 30px/1.1 var(--sans); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.kpi .l { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.kpi.hot .v { color: var(--bad); }
+
+section { padding: 40px 0; border-top: 1px solid var(--line); }
+h2 { font-size: 24px; letter-spacing: -.01em; margin: 0 0 6px; }
+.sub { color: var(--muted); margin: 0 0 22px; max-width: 70ch; }
+
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-weight: 600; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; background: var(--surface-2); }
+tr:last-child td { border-bottom: 0; }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.model { font-family: var(--mono); font-size: 13px; }
+.prov { color: var(--faint); font-size: 12px; }
+.barcell { width: 38%; min-width: 160px; }
+.bar { display: flex; align-items: center; gap: 10px; }
+.bar .track { flex: 1; height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; }
+.bar .fill { height: 100%; background: var(--bad); border-radius: 99px; }
+.bar .pct { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 48px; text-align: right; }
+.tag { display: inline-block; font: 600 11px/1 var(--mono); padding: 4px 7px; border-radius: 99px; background: var(--surface-2); color: var(--muted); }
+.tag.warn { background: var(--accent-soft); color: var(--accent); }
+.tag.bad { background: var(--bad-soft); color: var(--bad); }
+.tag.ok { background: var(--ok-soft); color: var(--ok); }
+
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+.card h3 { margin: 0 0 14px; font-size: 15px; }
+.hrow { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 12px; align-items: center; margin: 9px 0; font-size: 14px; }
+.hrow .name { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hrow .bar .track { min-width: 40px; }
+@media (max-width: 480px) { nav a:not(#gh) { display: none; } .kpi .v { font-size: 26px; } }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 13px/1 var(--mono); padding: 8px 10px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); display: inline-flex; gap: 8px; align-items: center; }
+.chip .eco { color: var(--faint); font-size: 11px; }
+.chip.reg { border-color: var(--bad); }
+.empty { background: var(--ok-soft); color: var(--ok); border-radius: 12px; padding: 16px 18px; font-size: 15px; }
+
+.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; counter-reset: s; }
+.steps li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; font-size: 14px; color: var(--muted); counter-increment: s; }
+.steps li::before { content: "0" counter(s); display: block; font: 700 12px/1 var(--mono); color: var(--accent); margin-bottom: 10px; }
+.steps li b { display: block; color: var(--text); font-size: 15px; margin-bottom: 4px; }
+.prose { max-width: 72ch; color: var(--muted); }
+.prose li { margin: 6px 0; }
+footer { border-top: 1px solid var(--line); padding: 28px 0 48px; color: var(--faint); font-size: 13px; }
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#"><span class="dot"></span>SlopWatch</a>
+  <nav><a href="#leaderboard">Leaderboard</a><a href="#where" class="opt">Patterns</a><a href="#watch">Watchtower</a><a href="#method" class="opt">Method</a><a href="https://github.com/" id="gh">GitHub</a></nav>
+</div></header>
+
+<main>
+<div class="wrap hero">
+  <div class="eyebrow">AI supply-chain observatory</div>
+  <h1>AI coding assistants invent packages. Attackers can register them.</h1>
+  <p class="lede">When a model tells a developer to <code>pip install</code> a package that doesn't exist, anyone can publish malware under that name. This is called <b>slopsquatting</b>. SlopWatch asks AI models real coding questions, checks every recommended package against PyPI and npm, and watches the fake names every day.</p>
+  <div class="kpis" id="kpis"></div>
+</div>
+
+<section id="leaderboard"><div class="wrap">
+  <h2>Hallucination leaderboard</h2>
+  <p class="sub">Share of package names in each model's install commands (<code>pip install …</code>, <code>npm install …</code>) that don't exist on the registry. These are the exact commands a developer would copy and paste.</p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Model</th><th class="barcell">Hallucination rate</th><th style="text-align:right">Install recs</th><th style="text-align:right">Fake</th><th style="text-align:right">Unique fake</th></tr></thead>
+    <tbody id="lb"></tbody>
+  </table></div>
+</div></section>
+
+<section id="where"><div class="wrap">
+  <h2>Where hallucinations happen</h2>
+  <p class="sub">Models make up names most often when no well-known library fits the task.</p>
+  <div class="grid2">
+    <div class="card"><h3>By task category</h3><div id="cats"></div></div>
+    <div class="card"><h3>By ecosystem</h3><div id="ecos"></div><h3 style="margin-top:22px">By how the question is asked</h3><div id="tpls"></div></div>
+  </div>
+</div></section>
+
+<section id="watch"><div class="wrap">
+  <h2>Watchtower</h2>
+  <p class="sub">Every fake name is re-checked daily. If someone registers one, it is downloaded and statically scanned for install hooks, obfuscated code and data exfiltration. Nothing is ever installed or run. Unregistered names are masked here so this page can't be used as a squatting list.</p>
+  <div id="registered"></div>
+  <h3 style="margin:28px 0 12px;font-size:15px">Fake names being tracked</h3>
+  <div class="chips" id="fakes"></div>
+</div></section>
+
+<section id="method"><div class="wrap">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><b>Ask</b>Realistic coding questions (common, security and niche tasks) are sent to each model through free API tiers.</li>
+    <li><b>Extract</b>Package names are parsed from install commands and imports in code. Prose and placeholders are ignored.</li>
+    <li><b>Verify</b>Every name is looked up on PyPI and npm: established, brand-new, empty, or missing.</li>
+    <li><b>Watch</b>A daily GitHub Action re-checks missing names and flags any that get registered.</li>
+    <li><b>Scan</b>Newly registered packages are read in memory and scored with transparent rules plus Datadog GuardDog.</li>
+  </ol>
+  <div class="prose" style="margin-top:28px">
+    <h3 style="color:var(--text);font-size:16px">Limitations and responsible disclosure</h3>
+    <ul>
+      <li>Rates are measured on install commands only. Imports are tracked separately because import names often differ from package names.</li>
+      <li>Models marked <span class="tag warn">low sample</span> have fewer than 30 install recommendations so far, so their rates are not yet reliable.</li>
+      <li>"Missing" means missing at check time: a name may also belong to a package that was deleted earlier.</li>
+      <li>Unregistered fake names are kept encrypted in the repository and masked on this page. Malicious packages are reported to the registry before they are discussed publicly.</li>
+      <li>SlopWatch never registers hallucinated names itself.</li>
+    </ul>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap" id="foot"></div></footer>
+
+<script type="application/json" id="data">__SLOPWATCH_DATA__</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById("data").textContent);
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const pct = (x) => (x * 100).toFixed(x > 0 && x < 0.1 ? 1 : 0) + "%";
+  const num = (x) => Number(x).toLocaleString("en-US");
+  const T = D.totals;
+
+  const kpis = [
+    [num(T.responses), "AI answers analysed"],
+    [num(T.install_mentions), "package install recommendations"],
+    [pct(T.rate), "pointed at packages that don't exist", true],
+    [num(T.unique_fake_names), "unique fake package names"],
+    [num(T.registered), "fake names later registered", T.registered > 0],
+  ];
+  $("kpis").innerHTML = kpis.map(([v, l, hot]) => `<div class="kpi${hot ? " hot" : ""}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+
+  const maxRate = Math.max(0.01, ...D.models.map((m) => m.rate));
+  const bar = (rate, max) => `<div class="bar"><div class="track"><div class="fill" style="width:${Math.max(rate > 0 ? 2 : 0, rate / max * 100)}%"></div></div><span class="pct">${pct(rate)}</span></div>`;
+  $("lb").innerHTML = D.models.map((m) => `<tr>
+      <td class="model">${esc(m.model)} <span class="prov">${esc(m.provider)}</span>${m.low_sample ? ' <span class="tag warn">low sample</span>' : ""}</td>
+      <td class="barcell">${bar(m.rate, maxRate)}</td>
+      <td class="num">${num(m.mentions)}</td><td class="num">${num(m.hallucinated)}</td><td class="num">${num(m.unique)}</td></tr>`).join("");
+
+  const hbars = (obj, labelFn) => {
+    const entries = Object.entries(obj);
+    const max = Math.max(0.01, ...entries.map(([, g]) => g.rate));
+    return entries.map(([k, g]) => `<div class="hrow" title="${g.hallucinated} of ${g.mentions} install recommendations"><span class="name">${esc(labelFn ? labelFn(k, g) : k)}</span>${bar(g.rate, max)}</div>`).join("");
+  };
+  $("cats").innerHTML = hbars(D.categories, (k) => k.charAt(0).toUpperCase() + k.slice(1).replace(/^ai\b/i, "AI").replace(/\bai\b/i, "AI"));
+  $("ecos").innerHTML = hbars(D.ecosystems, (k) => (k === "pypi" ? "PyPI (Python)" : "npm (JavaScript)"));
+  $("tpls").innerHTML = hbars(D.templates, (k) => (k === "script" ? '"Write a script that…"' : '"Best library to…?"'));
+
+  if (D.registered.length) {
+    $("registered").innerHTML = `<div class="table-scroll"><table><thead><tr><th>Registered fake name</th><th>Ecosystem</th><th>Detected</th><th>Static scan</th></tr></thead><tbody>${
+      D.registered.map((e) => {
+        const lvl = e.scan_level || "pending";
+        const cls = lvl === "high" ? "bad" : lvl === "medium" ? "warn" : lvl === "low" ? "ok" : "";
+        return `<tr><td class="model">${esc(e.name)}</td><td>${esc(e.ecosystem)}</td><td>${esc(e.detected_at.slice(0, 10))}</td><td><span class="tag ${cls}">${esc(lvl)}${e.scan_score != null ? " · " + e.scan_score : ""}</span></td></tr>`;
+      }).join("")}</tbody></table></div>`;
+  } else {
+    $("registered").innerHTML = `<div class="empty">None of the ${num(T.watched)} tracked fake names has been registered so far. They are checked every day.</div>`;
+  }
+
+  $("fakes").innerHTML = D.fake_names.map((f) => `<span class="chip${f.registered ? " reg" : ""}" title="${f.length} characters · suggested ${f.times}× by ${esc(f.models.join(", "))}"><span class="eco">${esc(f.ecosystem)}</span>${esc(f.label)}${f.registered ? ' <span class="tag bad">registered</span>' : ""}</span>`).join("") || '<span class="sub">No fake names yet.</span>';
+
+  const when = new Date(D.generated_at).toUTCString().replace(" GMT", " UTC");
+  $("foot").innerHTML = `Data updated ${esc(when)} · ${num(T.prompts)} prompts across ${num(T.models)} models · <a href="data.json">raw data (JSON)</a>. SlopWatch is an independent research project.`;
+})();
+</script>
+</body>
+</html>
