@@ -19,19 +19,22 @@ If an attacker registers that name and publishes malware, every developer who tr
 
 ## Early findings (first run, Nov 2026, small sample)
 
-| Model | Install recommendations | Pointed at non-existent packages |
+📄 **Full report: [RESEARCH.md](RESEARCH.md)**
+
+- **4.0%** of 451 AI install recommendations named packages that don't exist (95% CI 2.5–6.2%).
+- **npm answers were about 4x worse than PyPI** (7.5% vs 1.8%, non-overlapping confidence intervals).
+- **Two different model families invented the same fake package name**, so hallucinations are predictable and squattable.
+- Fake names cluster in **AI / modern-stack (12%)** and **niche (10%)** tasks; common tasks showed **0%**.
+- 7 of 17 fake names were **scoped npm packages** under real organisations' namespaces, so they look official.
+
+| Model | Install recommendations | Fake |
 |---|---|---|
-| OpenRouter free router | 103 | 6.8% |
+| OpenRouter free router | 118 | 6.8% |
+| Qwen 3.8 27B (Groq) | 44 | 4.5% |
 | gpt-oss-120b (Groq) | 259 | 3.1% |
-| Gemini 3.5 Flash | 30 | 0% *(small sample)* |
-| Qwen 3.8 27B (Groq) | 23 | 0% *(small sample)* |
+| Gemini 3.5 Flash | 30 | 0.0% |
 
-- Hallucinations cluster in **AI / modern-stack** and **niche** tasks (up to 11% of install recommendations); common tasks showed **0%**.
-- **npm** answers hallucinated about 4x more often than **PyPI** answers (6.9% vs 1.6%).
-- Asking *"what is the best library to…?"* produced about 3.5x more fake packages than *"write a script that…"*.
-- Fake names include convincing, official-looking scoped packages under well-known organisations' scopes.
-
-Numbers update on the live dashboard as the dataset grows; these early figures are not yet statistically robust.
+Per-model samples are still small; numbers update on the live dashboard as daily collection continues.
 
 ## How it works
 
