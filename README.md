@@ -3,7 +3,7 @@
 **An observatory for AI-hallucinated software packages.** SlopWatch measures how often AI coding assistants tell developers to install packages that don't exist, watches those fake names every day, and statically scans them the moment someone registers one.
 
 [![tests](../../actions/workflows/tests.yml/badge.svg)](../../actions/workflows/tests.yml)
-**Live dashboard:** https://sam786-web.github.io/slopwatch/
+**Live dashboard:** https://sam786-web.github.io/Slopwatch/
 
 ---
 
