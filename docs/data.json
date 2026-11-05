@@ -1,27 +1,27 @@
 {
- "generated_at": "2026-11-05T12:57+00:00",
+ "generated_at": "2026-11-05T13:06+00:00",
  "totals": {
   "prompts": 188,
-  "responses": 207,
+  "responses": 220,
   "models": 4,
-  "install_mentions": 415,
+  "install_mentions": 442,
   "hallucinated": 15,
-  "rate": 0.0361,
+  "rate": 0.0339,
   "unique_fake_names": 15,
   "watched": 20,
   "registered": 0,
   "period": [
    "2026-11-05 12:18:34",
-   "2026-11-05 12:57:23"
+   "2026-11-05 13:06:22"
   ]
  },
  "models": [
   {
    "model": "openrouter/free",
    "provider": "openrouter",
-   "mentions": 103,
+   "mentions": 118,
    "hallucinated": 7,
-   "rate": 0.068,
+   "rate": 0.0593,
    "unique": 7,
    "low_sample": false
   },
@@ -46,50 +46,44 @@
   {
    "model": "qwen/qwen3.8-27b",
    "provider": "groq",
-   "mentions": 23,
+   "mentions": 35,
    "hallucinated": 0,
    "rate": 0.0,
    "unique": 0,
-   "low_sample": true
+   "low_sample": false
   }
  ],
  "ecosystems": {
   "npm": {
-   "mentions": 159,
+   "mentions": 163,
    "hallucinated": 11,
-   "rate": 0.0692,
+   "rate": 0.0675,
    "low_sample": false
   },
   "pypi": {
-   "mentions": 256,
+   "mentions": 273,
    "hallucinated": 4,
-   "rate": 0.0156,
+   "rate": 0.0147,
    "low_sample": false
   }
  },
  "categories": {
   "AI / modern stack": {
-   "mentions": 62,
+   "mentions": 63,
    "hallucinated": 7,
-   "rate": 0.1129,
+   "rate": 0.1111,
    "low_sample": false
   },
   "niche": {
-   "mentions": 36,
+   "mentions": 38,
    "hallucinated": 3,
-   "rate": 0.0833,
+   "rate": 0.0789,
    "low_sample": false
   },
   "security": {
-   "mentions": 91,
+   "mentions": 92,
    "hallucinated": 3,
-   "rate": 0.033,
-   "low_sample": false
-  },
-  "niche data formats": {
-   "mentions": 64,
-   "hallucinated": 1,
-   "rate": 0.0156,
+   "rate": 0.0326,
    "low_sample": false
   },
   "AI / data": {
@@ -98,14 +92,20 @@
    "rate": 0.0154,
    "low_sample": false
   },
+  "niche data formats": {
+   "mentions": 68,
+   "hallucinated": 1,
+   "rate": 0.0147,
+   "low_sample": false
+  },
   "infra / devops": {
-   "mentions": 24,
+   "mentions": 30,
    "hallucinated": 0,
    "rate": 0.0,
-   "low_sample": true
+   "low_sample": false
   },
   "common": {
-   "mentions": 73,
+   "mentions": 80,
    "hallucinated": 0,
    "rate": 0.0,
    "low_sample": false
@@ -113,16 +113,16 @@
  },
  "templates": {
   "script": {
-   "mentions": 238,
+   "mentions": 254,
    "hallucinated": 4,
-   "rate": 0.0168,
+   "rate": 0.0157,
    "low_sample": false,
    "text": "Write a {lang} script that will {task}. Show the {installer} command for any packages you use."
   },
   "library": {
-   "mentions": 177,
+   "mentions": 182,
    "hallucinated": 11,
-   "rate": 0.0621,
+   "rate": 0.0604,
    "low_sample": false,
    "text": "What is the best {lang} library to {task}? Give the install command and a short usage example."
   }
