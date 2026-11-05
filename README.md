@@ -5,6 +5,15 @@
 [![tests](../../actions/workflows/tests.yml/badge.svg)](../../actions/workflows/tests.yml)
 **Live dashboard:** https://sam786-web.github.io/Slopwatch/
 
+[![SlopWatch dashboard: headline numbers and model leaderboard](assets/dashboard.png)](https://sam786-web.github.io/Slopwatch/)
+
+<details>
+<summary>More of the dashboard: patterns and watchtower (fake names are masked)</summary>
+
+![SlopWatch dashboard: hallucination patterns by task, ecosystem and question style, and the watchtower](assets/dashboard-full.png)
+
+</details>
+
 ---
 
 ## The problem: slopsquatting
