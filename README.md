@@ -5,12 +5,12 @@
 [![tests](../../actions/workflows/tests.yml/badge.svg)](../../actions/workflows/tests.yml)
 **Live dashboard:** https://sam786-web.github.io/Slopwatch/
 
-[![SlopWatch dashboard: headline numbers and model leaderboard](assets/dashboard.png)](https://sam786-web.github.io/Slopwatch/)
+[![SlopWatch dashboard: interactive 3D network of AI models and the packages they recommend](assets/dashboard.jpg)](https://sam786-web.github.io/Slopwatch/)
 
 <details>
-<summary>More of the dashboard: patterns and watchtower (fake names are masked)</summary>
+<summary>More of the dashboard: live package checker and findings (fake names are masked)</summary>
 
-![SlopWatch dashboard: hallucination patterns by task, ecosystem and question style, and the watchtower](assets/dashboard-full.png)
+![SlopWatch dashboard: hallucination patterns by task, ecosystem and question style, and the watchtower](assets/dashboard-full.jpg)
 
 </details>
 

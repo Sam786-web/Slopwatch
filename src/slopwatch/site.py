@@ -110,7 +110,32 @@ def build_stats(conn) -> dict:
             for (eco, name), f in sorted(fake.items(), key=lambda kv: -kv[1]["times"])
         ],
         "registered": events,
+        "graph": build_graph(installs, registered),
     }
+
+
+def build_graph(installs: list[dict], registered: set) -> dict:
+    """Model -> package network for the 3D view. Fake names keep masked labels and opaque ids."""
+    pkg = defaultdict(lambda: {"times": 0, "models": defaultdict(int), "status": ""})
+    for x in installs:
+        p = pkg[(x["ecosystem"], x["registry_name"])]
+        p["times"] += 1
+        p["status"] = x["status"]
+        p["models"][x["model"].split(":", 1)[1]] += 1
+    models = sorted({m for p in pkg.values() for m in p["models"]})
+    nodes = [{"id": f"m{i}", "type": "model", "label": m} for i, m in enumerate(models)]
+    mid = {m: f"m{i}" for i, m in enumerate(models)}
+    links = []
+    for i, ((eco, name), p) in enumerate(sorted(pkg.items(), key=lambda kv: -kv[1]["times"])):
+        fake = p["status"] in ("missing", "empty")
+        if not fake and p["times"] < 2:
+            continue  # keep the network readable: one-off real packages are left out
+        shown = name if (not fake or (eco, name) in registered) else mask(name)
+        nid = f"p{i}"
+        nodes.append({"id": nid, "type": "fake" if fake else "real", "label": shown, "ecosystem": eco,
+                      "times": p["times"], "status": p["status"], "models": sorted(p["models"])})
+        links += [{"source": mid[m], "target": nid, "value": n, "fake": fake} for m, n in p["models"].items()]
+    return {"nodes": nodes, "links": links}
 
 
 def build_site(conn, out_dir: Path | None = None) -> Path:
